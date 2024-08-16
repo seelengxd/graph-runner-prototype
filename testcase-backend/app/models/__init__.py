@@ -1,7 +1,7 @@
 from sqlmodel import create_engine, SQLModel
 
-from .node import Node
-from .edge import Edge
+from .node import Node, NodeBase
+from .edge import Edge, EdgeBase
 
 
 sqlite_file_name = "database.db"

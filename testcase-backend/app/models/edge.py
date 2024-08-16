@@ -5,6 +5,11 @@ if TYPE_CHECKING:
     from .node import Node
 
 
-class Edge(SQLModel, table=True):
-    start: int = Field(default=None, foreign_key="node.id", primary_key=True)
-    end: int = Field(default=None, foreign_key="node.id", primary_key=True)
+class EdgeBase(SQLModel):
+    id: int = Field(primary_key=True)
+    start: int = Field(foreign_key="node.id")
+    end: int = Field(foreign_key="node.id")
+
+
+class Edge(EdgeBase, table=True):
+    pass

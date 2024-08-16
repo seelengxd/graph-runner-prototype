@@ -2,10 +2,13 @@ from sqlmodel import SQLModel, Field, Relationship
 from .edge import Edge
 
 
-class Node(SQLModel, table=True):
-    id: int = Field(primary_key=True)
+class NodeBase(SQLModel):
     label: str
     code: str
+
+
+class Node(NodeBase, table=True):
+    id: int = Field(primary_key=True)
 
     # reference: https://github.com/fastapi/sqlmodel/issues/89
     incoming_nodes: list["Node"] = Relationship(
