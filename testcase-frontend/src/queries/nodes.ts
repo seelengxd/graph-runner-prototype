@@ -61,3 +61,17 @@ export const useUpdateNodeLabel = (id: number) => {
     },
   });
 };
+
+export const useDeleteNode = (id: number) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => {
+      return client.deleteNodeApiNodesIdDelete({
+        id,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["nodes"] });
+    },
+  });
+};

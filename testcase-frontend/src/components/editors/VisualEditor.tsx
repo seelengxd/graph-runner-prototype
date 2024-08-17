@@ -30,6 +30,7 @@ const VisualEditor = ({
   const nodeTypes = useMemo(() => ({ custom: CustomNode }), []);
   const edgeTypes = useMemo(() => ({ custom: CustomEdge }), []);
 
+  console.log(activeNode);
   const nodesData =
     nodes &&
     (nodes as Node[]).map((node, index) => ({

@@ -1,8 +1,8 @@
 
 from fastapi import APIRouter, Depends, HTTPException
 from http import HTTPStatus
-from sqlmodel import Session, select
-from models import Node, NodeNew, NodeUpdate
+from sqlmodel import Session, or_, select
+from models import Node, NodeNew, NodeUpdate, Edge
 from dependencies import get_session
 
 
@@ -49,6 +49,13 @@ def delete_node(id: int, session: Session = Depends(get_session)):
     node = session.get(Node, id)
     if not node:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
+
+    # First delete all edges related to it
+    edges = session.exec(select(Edge).where(
+        or_(Edge.start == id or Edge.end == id))).all()
+    for edge in edges:
+        session.delete(edge)
+
     session.delete(node)
     session.commit()
     return

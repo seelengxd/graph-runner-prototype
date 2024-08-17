@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import "@xyflow/react/dist/style.css";
 import { Button } from "@/components/ui/button";
 import CodeEditor from "@/components/editors/CodeEditor";
 import { useQuery } from "@tanstack/react-query";
 import { Node } from "../client/types.gen";
-import CustomNode from "@/components/nodes/CustomNode";
-import CustomEdge from "@/components/nodes/CustomEdge";
 import { getAllEdges, getAllNodes, useUpdateNodeCode } from "@/queries";
 import VisualEditor from "@/components/editors/VisualEditor";
 
