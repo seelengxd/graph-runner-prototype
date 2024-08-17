@@ -1,8 +1,21 @@
+from enum import Enum
 from sqlmodel import SQLModel, Field, Relationship
 from .edge import Edge
 
 
-class NodeBase(SQLModel):
+class NodeType(str, Enum):
+    INPUT = "input"
+    OUTPUT = "output"
+    USER_PROGRAM = "user_program"
+    PROGRAM = "program"
+    COMPARATOR = "comparator"
+
+
+class NodeNew(SQLModel):
+    type: NodeType
+
+
+class NodeBase(NodeNew):
     label: str
     code: str
 

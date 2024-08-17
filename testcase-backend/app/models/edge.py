@@ -6,10 +6,9 @@ if TYPE_CHECKING:
 
 
 class EdgeBase(SQLModel):
-    id: int = Field(primary_key=True)
     start: int = Field(foreign_key="node.id")
     end: int = Field(foreign_key="node.id")
 
 
 class Edge(EdgeBase, table=True):
-    pass
+    id: int = Field(primary_key=True)

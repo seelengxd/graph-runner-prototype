@@ -6,11 +6,11 @@ from dependencies import get_session
 from models import Edge, EdgeBase
 
 
-router = APIRouter(prefix="/edges", tags=["nodes"])
+router = APIRouter(prefix="/edges", tags=["edges"])
 
 
 @router.get("")
-def get_all_edges(session: Session = Depends(get_session)):
+def get_all_edges(session: Session = Depends(get_session)) -> list[Edge]:
     edges = session.exec(select(Edge)).all()
     return edges
 

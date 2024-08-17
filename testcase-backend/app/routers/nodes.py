@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from http import HTTPStatus
 from sqlmodel import Session, select
-from models import Node, NodeBase
+from models import Node, NodeBase, NodeNew
 from dependencies import get_session
 
 
@@ -24,8 +24,8 @@ def get_node(id: int, session: Session = Depends(get_session)) -> Node:
 
 
 @router.post("")
-def create_node(session: Session = Depends(get_session)):
-    node = Node(label="New Node", code="")
+def create_node(data: NodeNew, session: Session = Depends(get_session)):
+    node = Node(label="New Node", code="", type=data.type)
     session.add(node)
     session.commit()
     session.refresh(node)
