@@ -22,17 +22,16 @@ export type Node = {
     id: number;
 };
 
-export type NodeBase = {
-    type: NodeType;
-    label: string;
-    code: string;
-};
-
 export type NodeNew = {
     type: NodeType;
 };
 
 export type NodeType = 'input' | 'output' | 'user_program' | 'program' | 'comparator';
+
+export type NodeUpdate = {
+    label?: string | null;
+    code?: string | null;
+};
 
 export type ValidationError = {
     loc: Array<(string | number)>;
@@ -70,7 +69,7 @@ export type GetNodeApiNodesIdGetResponse = Node;
 
 export type UpdateNodeApiNodesIdPutData = {
     id: number;
-    requestBody: NodeBase;
+    requestBody: NodeUpdate;
 };
 
 export type UpdateNodeApiNodesIdPutResponse = unknown;

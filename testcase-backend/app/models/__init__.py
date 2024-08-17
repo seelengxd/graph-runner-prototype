@@ -1,6 +1,6 @@
 from sqlmodel import create_engine, SQLModel
 
-from .node import Node, NodeBase, NodeNew
+from .node import Node, NodeBase, NodeNew, NodeUpdate
 from .edge import Edge, EdgeBase
 
 

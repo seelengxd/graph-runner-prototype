@@ -20,6 +20,11 @@ class NodeBase(NodeNew):
     code: str
 
 
+class NodeUpdate(SQLModel):
+    label: str | None = None
+    code: str | None = None
+
+
 class Node(NodeBase, table=True):
     id: int = Field(primary_key=True)
 

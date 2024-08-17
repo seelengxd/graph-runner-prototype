@@ -73,25 +73,6 @@ export const $Node = {
     title: 'Node'
 } as const;
 
-export const $NodeBase = {
-    properties: {
-        type: {
-            '$ref': '#/components/schemas/NodeType'
-        },
-        label: {
-            type: 'string',
-            title: 'Label'
-        },
-        code: {
-            type: 'string',
-            title: 'Code'
-        }
-    },
-    type: 'object',
-    required: ['type', 'label', 'code'],
-    title: 'NodeBase'
-} as const;
-
 export const $NodeNew = {
     properties: {
         type: {
@@ -107,6 +88,35 @@ export const $NodeType = {
     type: 'string',
     enum: ['input', 'output', 'user_program', 'program', 'comparator'],
     title: 'NodeType'
+} as const;
+
+export const $NodeUpdate = {
+    properties: {
+        label: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Label'
+        },
+        code: {
+            anyOf: [
+                {
+                    type: 'string'
+                },
+                {
+                    type: 'null'
+                }
+            ],
+            title: 'Code'
+        }
+    },
+    type: 'object',
+    title: 'NodeUpdate'
 } as const;
 
 export const $ValidationError = {

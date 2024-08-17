@@ -4,13 +4,10 @@ import {
   EdgeLabelRenderer,
   EdgeProps,
   getBezierPath,
-  useReactFlow,
 } from "@xyflow/react";
-
-// import "./buttonedge.css";
+import { useDeleteEdge } from "@/queries";
 
 export default function CustomEdge({
-  id,
   sourceX,
   sourceY,
   targetX,
@@ -19,8 +16,8 @@ export default function CustomEdge({
   targetPosition,
   style = {},
   markerEnd,
+  data,
 }: EdgeProps) {
-  const { setEdges } = useReactFlow();
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,
@@ -30,8 +27,9 @@ export default function CustomEdge({
     targetPosition,
   });
 
+  const deleteEdgeMutation = useDeleteEdge();
   const onEdgeClick = () => {
-    setEdges((edges) => edges.filter((edge) => edge.id !== id));
+    deleteEdgeMutation.mutate(data.edge.id);
   };
 
   return (
@@ -47,9 +45,9 @@ export default function CustomEdge({
             // if you have an interactive element, set pointer-events: all
             pointerEvents: "all",
           }}
-          className="nodrag nopan"
+          className="nodrag nopan z-50"
         >
-          <button className="bg-red-200" onClick={onEdgeClick}>
+          <button className="text-red-500 text-lg" onClick={onEdgeClick}>
             ×
           </button>
         </div>

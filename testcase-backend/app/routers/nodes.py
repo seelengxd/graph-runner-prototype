@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from http import HTTPStatus
 from sqlmodel import Session, select
-from models import Node, NodeBase, NodeNew
+from models import Node, NodeNew, NodeUpdate
 from dependencies import get_session
 
 
@@ -33,11 +33,11 @@ def create_node(data: NodeNew, session: Session = Depends(get_session)):
 
 
 @router.put("/{id}")
-def update_node(id: int, data: NodeBase, session: Session = Depends(get_session)):
+def update_node(id: int, data: NodeUpdate, session: Session = Depends(get_session)):
     node = session.get(Node, id)
     if not node:
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND)
-    node.sqlmodel_update(data.model_dump())
+    node.sqlmodel_update(data.model_dump(exclude_unset=True))
     session.add(node)
     session.commit()
     session.refresh(node)
