@@ -77,25 +77,26 @@ const VisualEditor = ({
     <div>
       <div className="mb-2 flex gap-2">
         <Button
+          className="bg-yellow-600"
+          onClick={() => addNodeMutation.mutate("program")}
+        >
+          <PlusIcon /> Program
+        </Button>
+        {/* TODO: Add support for more kinds of nodes */}
+        {/* <Button
           className="bg-green-600"
           onClick={() => {
             return addNodeMutation.mutate("input");
           }}
         >
           <PlusIcon /> Input
-        </Button>
-        <Button
-          className="bg-yellow-600"
-          onClick={() => addNodeMutation.mutate("program")}
-        >
-          <PlusIcon /> Program
-        </Button>
-        <Button
+        </Button> */}
+        {/* <Button
           className="bg-orange-600"
           onClick={() => addNodeMutation.mutate("comparator")}
         >
           <PlusIcon /> Comparator
-        </Button>
+        </Button> */}
       </div>
       <ReactFlow
         nodeTypes={nodeTypes}
