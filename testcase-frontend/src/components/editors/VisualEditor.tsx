@@ -21,6 +21,68 @@ type OwnProps = {
   activeNode: Node | null;
 };
 
+type NodePosition = {
+  depth: number;
+  index: number;
+};
+
+const processNodePositions = (nodes: Node[], edges: Edge[]) => {
+  const result = [];
+
+  // Flip edges to do topological sort
+  // So nodes like x are on the same depth as c, not a
+  //            x ----v
+  // a -> b --> c --> d
+  const flippedEdges = edges.map((edge) => ({
+    start: edge.end,
+    end: edge.start,
+  }));
+
+  // Attempt inefficient (my typescript cmi) topological sort
+  const inDegrees: { [id: number]: number } = {};
+  const idToNode: { [id: number]: Node } = {};
+  for (const node of nodes) {
+    inDegrees[node.id] = 0;
+    idToNode[node.id] = node;
+  }
+  for (const flippedEdge of flippedEdges) {
+    inDegrees[flippedEdge.end]++;
+  }
+
+  let curr: Node[] = nodes.filter((node) => inDegrees[node.id] === 0);
+  let next: Node[] = [];
+
+  let count = 0;
+
+  while (curr.length > 0) {
+    count += curr.length;
+    let currNodeIds = curr.map((node) => node.id);
+
+    let endsToRemove = flippedEdges
+      .filter((edge) => currNodeIds.includes(edge.start))
+      .map((edge) => edge.end);
+
+    for (const end of endsToRemove) {
+      inDegrees[end]--;
+      if (!inDegrees[end]) {
+        next.push(idToNode[end]);
+      }
+    }
+    result.push(curr);
+    curr = next;
+    next = [];
+  }
+
+  if (count !== nodes.length) {
+    // TODO: handle cycle properly
+    console.log("cycle!" + count + " " + nodes.length);
+    return [nodes];
+  }
+
+  result.reverse();
+  return result;
+};
+
 const VisualEditor = ({
   nodes,
   edges,
@@ -30,24 +92,28 @@ const VisualEditor = ({
   const nodeTypes = useMemo(() => ({ custom: CustomNode }), []);
   const edgeTypes = useMemo(() => ({ custom: CustomEdge }), []);
 
-  console.log(activeNode);
+  let processedNodes = processNodePositions(nodes, edges);
   const nodesData =
-    nodes &&
-    (nodes as Node[]).map((node, index) => ({
-      id: node.id.toString(),
-      position: { x: 10, y: 10 + index * 100 },
-      data: {
-        label: node.label,
-        node,
-        onClick: () => {
-          if (activeNode?.id !== node.id) {
-            onChangeActiveNode(node);
-          }
+    processedNodes &&
+    processedNodes.flatMap((nodes, depth) =>
+      (nodes as Node[]).map((node, index) => ({
+        id: node.id.toString(),
+        position: { x: 10 + index * 250, y: 10 + depth * 100 },
+        data: {
+          label: node.label,
+          node,
+          onClick: () => {
+            if (activeNode?.id !== node.id) {
+              onChangeActiveNode(node);
+            }
+          },
+          active: activeNode?.id === node.id,
         },
-        active: activeNode?.id === node.id,
-      },
-      type: "custom",
-    }));
+        type: "custom",
+      }))
+    );
+
+  console.log(nodesData);
 
   const edgesData =
     edges &&
